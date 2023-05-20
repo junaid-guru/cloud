@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: "nginx:latest"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.nginx.entrypoints=websecure
+      - traefik.http.routers.nginx.rule=Host(`example.localhost`)
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: "traefik:latest"
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik-data/traefik_rendered.yml:/traefik.yml:ro"
+      - "./traefik-data/acme.json:/acme.json"
+      - "./traefik-data/configurations:/configurations"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=proxy
+      - traefik.http.routers.traefik-secure.entrypoints=websecure
+      - traefik.http.routers.traefik-secure.rule=Host(`${TRAEFIK_HOST}`)
+      - traefik.http.routers.traefik-secure.service=api@internal
+      - traefik.http.routers.traefik-secure.middlewares=user-auth@file
+    env_file:
+      - .env
+
+  registry:
+    container_name: registry
+    restart: always
+    image: registry
+    environment:
+      REGISTRY_HTTP_ADDR: 0.0.0.0:5000
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+    volumes:
+      - ./docker-registry/config/config.yml:/etc/docker/registry/config.yml:ro
+      - ./docker-registry/data:/var/lib/registry:rw
+      - ./docker-registry/auth:/auth
+    labels:
+      - traefik.enable=true
+      - traefik.port=5000
+      - traefik.docker.network=proxy
+      - traefik.http.routers.registry.entrypoints=websecure
+      - traefik.http.routers.registry.rule=Host(`registry.${TRAEFIK_HOST}`)
+    networks:
+      - proxy
+    env_file:
+      - .env
+
+networks:
+  proxy:
+    external: true

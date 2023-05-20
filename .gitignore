@@ -1,0 +1,15 @@
+.DS_Store
+*.log
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+.env
+
+.idea/
+./traefik-data/traefik_rendered.yml
+./docker-registry/data/
+./docker-registry/auth/
