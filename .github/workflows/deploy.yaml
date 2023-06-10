@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Print Environment Variables
-        with:
+        env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
           TEST_KEY: ${{ secrets.TEST_KEY }}
         run: |
