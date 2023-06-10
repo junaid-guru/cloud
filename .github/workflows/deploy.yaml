@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install yq
         run: |
-          curl -sSL -o /usr/bin/yq https://github.com/mikefarah/yq/releases/download/v4.13.3/yq_linux_amd64
-          chmod +x /usr/bin/yq
+          curl -sSL -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.13.3/yq_linux_amd64
+          chmod +x /usr/local/bin/yq
       - name: Print Environment Variables
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
