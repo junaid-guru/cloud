@@ -21,3 +21,5 @@ jobs:
           printenv
           
           ls -l
+          
+          yq
