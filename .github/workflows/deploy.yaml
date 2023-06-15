@@ -22,11 +22,11 @@ jobs:
       - name: Download required binaries
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          chmod +x /usr/local/bin/docker-compose
-        
-          curl -sSL "https://github.com/mikefarah/yq/releases/download/v4.13.3/yq_linux_amd64" -o /usr/local/bin/yq
-          chmod +x /usr/local/bin/yq
+          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          
+          sudo curl -sSL "https://github.com/mikefarah/yq/releases/download/v4.13.3/yq_linux_amd64" -o /usr/local/bin/yq
+          sudo chmod +x /usr/local/bin/yq
 
       - name: Print Environment Variables
         env:
